@@ -17,7 +17,7 @@ public class View {
             scanner.next();
         }
         int valor = scanner.nextInt();
-        scanner.nextLine(); // Limpa o buffer
+        scanner.nextLine();
         return valor;
     }
 
@@ -33,7 +33,7 @@ public class View {
             scanner.next();
         }
         int valor = scanner.nextInt();
-        scanner.nextLine(); // Limpa o buffer
+        scanner.nextLine();
         return valor;
     }
 
