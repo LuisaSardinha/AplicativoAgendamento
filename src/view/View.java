@@ -10,6 +10,7 @@ public class View {
         System.out.println("2. Consultar Cliente por ID");
         System.out.println("3. Listar Clientes");
         System.out.println("4. Excluir Cliente");
+        System.out.println("5. Agendar Cliente");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
         while (!scanner.hasNextInt()) {
