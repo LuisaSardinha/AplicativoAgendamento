@@ -1,12 +1,12 @@
 package control;
 import model.Cliente;
-import model.Agendamento;
 import view.View;
 import java.util.*;
 
 public class AplicativoAgendamento {
     private List<Cliente> clientes = new ArrayList<>();
-    private Queue<Agendamento> filaAgendamentos = new LinkedList<>();
+
+    private PriorityQueue<Cliente> filaEspera = new PriorityQueue<>(Comparator.comparingInt(Cliente::getPrioridade));
     private View view = new View();
 
     public void iniciar() {
@@ -17,6 +17,7 @@ public class AplicativoAgendamento {
                 case 1 -> cadastrarCliente();
                 case 2 -> consultarCliente();
                 case 3 -> listarClientes();
+                case 4 -> excluirCliente();
                 case 0 -> view.exibirMensagem("Saindo...");
                 default -> view.exibirMensagem("Opção inválida.");
             }
@@ -25,11 +26,15 @@ public class AplicativoAgendamento {
 
     private void cadastrarCliente() {
         String nome = view.lerString("Nome do Cliente: ");
-        String telefone = view.lerString("Telefone: ");
+        view.exibirMensagem("Telefone: ");
+        String telefone = view.lerString("");
         int id = view.lerInt("ID: ");
+        int prioridade = view.lerInt("Prioridade (1 - Alta, 2 - Média, 3 - Baixa): ");
 
-        Cliente cliente = new Cliente(nome, telefone, id);
+        Cliente cliente = new Cliente(nome, telefone, id, prioridade);
         clientes.add(cliente);
+        filaEspera.add(cliente);
+
         view.exibirMensagem("Cliente cadastrado: " + cliente);
     }
 
@@ -56,6 +61,24 @@ public class AplicativoAgendamento {
         view.exibirMensagem("\n--- Lista de Clientes ---");
         for (Cliente cliente : clientes) {
             view.exibirMensagem(cliente.toString());
+        }
+
+        view.exibirMensagem("\n--- Fila de Espera por Prioridade ---");
+        PriorityQueue<Cliente> filaTemp = new PriorityQueue<>(filaEspera);
+        while (!filaTemp.isEmpty()) {
+            view.exibirMensagem(filaTemp.poll().toString());
+        }
+    }
+
+    private void excluirCliente() {
+        int id = view.lerInt("Informe o ID do cliente a ser excluído: ");
+        Cliente cliente = consultarClientePorId(id);
+        if (cliente != null) {
+            clientes.remove(cliente);
+            filaEspera.remove(cliente);
+            view.exibirMensagem("Cliente excluído: " + cliente);
+        } else {
+            view.exibirMensagem("Cliente não encontrado.");
         }
     }
 

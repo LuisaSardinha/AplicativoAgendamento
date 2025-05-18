@@ -9,19 +9,32 @@ public class View {
         System.out.println("1. Cadastrar Cliente");
         System.out.println("2. Consultar Cliente por ID");
         System.out.println("3. Listar Clientes");
+        System.out.println("4. Excluir Cliente");
         System.out.println("0. Sair");
         System.out.print("Escolha uma opção: ");
-        return scanner.nextInt();
+        while (!scanner.hasNextInt()) {
+            System.out.println("Entrada inválida. Insira um número inteiro:");
+            scanner.next();
+        }
+        int valor = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer
+        return valor;
     }
 
     public String lerString(String mensagem) {
         System.out.print(mensagem);
-        return scanner.next();
+        return scanner.nextLine();
     }
 
     public int lerInt(String mensagem) {
         System.out.print(mensagem);
-        return scanner.nextInt();
+        while (!scanner.hasNextInt()) {
+            System.out.println("Entrada inválida. Insira um número inteiro:");
+            scanner.next();
+        }
+        int valor = scanner.nextInt();
+        scanner.nextLine(); // Limpa o buffer
+        return valor;
     }
 
     public void exibirMensagem(String mensagem) {
