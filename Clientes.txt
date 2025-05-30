@@ -1,0 +1,15 @@
+Nome: amanda
+CPF: 097445515145145
+E-mail: 2fd jhn m
+---
+AMANDA;1234567890;1;2
+ID: 1
+Nome: amanda
+Telefone: 71986714721
+Prioridade: 2
+---------------
+ID: 2
+Nome: Amanda
+Telefone: 71982742042
+Prioridade: 3
+---------------

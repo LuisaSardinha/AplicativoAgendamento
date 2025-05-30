@@ -1,4 +1,6 @@
 package control;
+import java.io.FileWriter;
+import java.io.IOException;
 import model.Cliente;
 import model.Agendamento;
 import java.text.ParseException;
@@ -6,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import view.View;
 import java.util.*;
+
 
 public class AplicativoAgendamento {
 
@@ -52,15 +55,27 @@ public class AplicativoAgendamento {
     }
 
     private void cadastrarCliente() {
-        String nome = view.lerString("Nome do Cliente: ");
-        view.exibirMensagem("Telefone: ");
-        String telefone = view.lerString("");
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+        System.out.print("Telefone: ");
+        String telefone = scanner.nextLine();
         int id = view.lerInt("ID: ");
         int prioridade = view.lerInt("Prioridade (1 - Alta, 2 - Média, 3 - Baixa): ");
 
         Cliente cliente = new Cliente(nome, telefone, id, prioridade);
         clientes.add(cliente);
         filaEspera.add(cliente);
+        
+        try (FileWriter writer = new FileWriter("clientes.txt", true)) {
+            writer.write("ID: " + cliente.getId() + "\n");
+            writer.write("Nome: " + cliente.getNome() + "\n");
+            writer.write("Telefone: " + cliente.getTelefone() + "\n");
+            writer.write("Prioridade: " + cliente.getPrioridade() + "\n");
+            writer.write("---------------\n");
+        } catch (IOException e) {
+            System.err.println("Erro ao salvar cliente no arquivo: " + e.getMessage());
+        }
 
         view.exibirMensagem("Cliente cadastrado: " + cliente);
     }
@@ -112,6 +127,9 @@ public class AplicativoAgendamento {
             view.exibirMensagem("Cliente não encontrado.");
         }
     }
+
+
+
 
     public static void main(String[] args) {
         new AplicativoAgendamento().iniciar();
