@@ -1,4 +1,6 @@
 package control;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import model.Cliente;
@@ -11,6 +13,7 @@ import java.util.*;
 
 
 public class AplicativoAgendamento {
+
 
     private void agendarCliente() {
         int id = view.lerInt("Informe o ID do cliente para agendar: ");
@@ -39,6 +42,7 @@ public class AplicativoAgendamento {
     private List<Agendamento> agendamentos = new ArrayList<>();
 
     public void iniciar() {
+        carregarClientesDoArquivo();
         int opcao;
         do {
             opcao = view.mostrarMenu();
@@ -79,6 +83,41 @@ public class AplicativoAgendamento {
 
         view.exibirMensagem("Cliente cadastrado: " + cliente);
     }
+    private void carregarClientesDoArquivo() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("clientes.txt"))) {
+            String linha;
+            String nome = null;
+            String telefone = null;
+            int id = -1;
+            int prioridade = -1;
+
+            while ((linha = reader.readLine()) != null) {
+                if (linha.startsWith("ID: ")) {
+                    id = Integer.parseInt(linha.substring(4).trim());
+                } else if (linha.startsWith("Nome: ")) {
+                    nome = linha.substring(6).trim();
+                } else if (linha.startsWith("Telefone: ")) {
+                    telefone = linha.substring(10).trim();
+                } else if (linha.startsWith("Prioridade: ")) {
+                    prioridade = Integer.parseInt(linha.substring(12).trim());
+                } else if (linha.startsWith("---------------")) {
+                    if (nome != null && telefone != null && id != -1 && prioridade != -1) {
+                        Cliente cliente = new Cliente(nome, telefone, id, prioridade);
+                        clientes.add(cliente);
+                        filaEspera.add(cliente);
+                    }
+                    nome = null;
+                    telefone = null;
+                    id = -1;
+                    prioridade = -1;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Erro ao carregar clientes do arquivo: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.err.println("Erro de formato no arquivo de clientes: " + e.getMessage());
+        }
+    }
 
     private void consultarCliente() {
         int id = view.lerInt("Informe o ID do cliente: ");
@@ -104,6 +143,7 @@ public class AplicativoAgendamento {
         for (Agendamento agendamento : agendamentos) {
             view.exibirMensagem(agendamento.toString());
         }
+
         view.exibirMensagem("\n--- Lista de Clientes ---");
         for (Cliente cliente : clientes) {
             view.exibirMensagem(cliente.toString());
