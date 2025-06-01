@@ -163,8 +163,22 @@ public class AplicativoAgendamento {
             clientes.remove(cliente);
             filaEspera.remove(cliente);
             view.exibirMensagem("Cliente excluído: " + cliente);
+            atualizarArquivoClientes();
         } else {
             view.exibirMensagem("Cliente não encontrado.");
+        }
+    }
+    private void atualizarArquivoClientes(){
+        try (FileWriter writer= new FileWriter("clientes.txt")) {
+            for (Cliente cliente : clientes){
+                writer.write("ID: " + cliente.getId() + "\n");
+                writer.write("Nome: " + cliente.getNome() + "\n");
+                writer.write("Telefone: " + cliente.getTelefone() + "\n");
+                writer.write("Prioridade: " + cliente.getPrioridade() + "\n");
+                writer.write("---------------\n");
+            }
+        } catch (IOException e){
+            System.err.println("Erro ao atualizar o arquivo de clientes: " + e.getMessage());
         }
     }
 
