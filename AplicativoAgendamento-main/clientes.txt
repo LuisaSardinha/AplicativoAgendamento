@@ -1,0 +1,50 @@
+ID: 1
+Nome: Ana Banana
+Telefone: 4002-8922
+Prioridade: 3
+---------------
+ID: 1
+Nome: Alvin
+Telefone: 1111-2222
+Prioridade: 2
+---------------
+ID: 2
+Nome: Simon
+Telefone: 2222-33333
+Prioridade: 1
+---------------
+ID: 3
+Nome: Theodore
+Telefone: 1111-3333
+Prioridade: 3
+---------------
+ID: 1
+Nome: Alvin
+Telefone: 1234-5647
+Prioridade: 2
+---------------
+ID: 2
+Nome: Simon
+Telefone: 1234-5678
+Prioridade: 1
+---------------
+ID: 2
+Nome: Ana Banana
+Telefone: 2234444
+Prioridade: 2
+---------------
+ID: 4
+Nome: 4444
+Telefone: 44
+Prioridade: 2
+---------------
+ID: 1
+Nome: aa
+Telefone: a
+Prioridade: 2
+---------------
+ID: 2
+Nome: aa
+Telefone: a
+Prioridade: 3
+---------------

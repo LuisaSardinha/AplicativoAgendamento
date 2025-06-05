@@ -1,4 +1,6 @@
 package model;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Agendamento {
@@ -20,6 +22,7 @@ public class Agendamento {
 
     @Override
     public String toString() {
-        return "Cliente: " + cliente.getNome() + " | Horário: " + horario;
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE, dd/MM/yyyy 'às' HH:mm");
+        return "Cliente: " + cliente.getNome() + " | Horário: " + sdf.format(horario);
     }
 }
