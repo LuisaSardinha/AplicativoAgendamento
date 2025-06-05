@@ -8,6 +8,8 @@ import model.Agendamento;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import model.Servico;
 import view.View;
 import java.util.*;
 
@@ -24,18 +26,40 @@ public class AplicativoAgendamento {
             return;
         }
 
+        if (servicos.isEmpty()) {
+            view.exibirMensagem("Nenhum serviço disponível. Cadastre um serviço antes de agendar.");
+            return;
+        }
+
+        view.exibirMensagem("--- Serviços Disponíveis ---");
+        for (int i = 0; i < servicos.size(); i++) {
+            view.exibirMensagem(i + " - " + servicos.get(i));
+        }
+
+        int indiceServico = view.lerInt("Escolha o número do serviço: ");
+
+        if (indiceServico < 0 || indiceServico >= servicos.size()) {
+            view.exibirMensagem("Serviço inválido.");
+            return;
+        }
+
         String dataStr = view.lerString("Informe a data do agendamento (dd/MM/yyyy HH:mm): ");
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
         try {
             Date data = sdf.parse(dataStr);
-            Agendamento agendamento = new Agendamento(cliente, data);
+            Servico servicoEscolhido = servicos.get(indiceServico);
+            Agendamento agendamento = new Agendamento(cliente, data, servicoEscolhido);
             agendamentos.add(agendamento);
             view.exibirMensagem("Agendamento realizado: " + agendamento);
         } catch (ParseException e) {
             view.exibirMensagem("Data inválida. Utilize o formato dd/MM/yyyy HH:mm.");
         }
     }
+
+
     private List<Cliente> clientes = new ArrayList<>();
+    private List<Servico> servicos = new ArrayList<>();
 
     private PriorityQueue<Cliente> filaEspera = new PriorityQueue<>(Comparator.comparingInt(Cliente::getPrioridade));
     private View view = new View();
@@ -52,10 +76,22 @@ public class AplicativoAgendamento {
                 case 3 -> listarClientes();
                 case 4 -> excluirCliente();
                 case 5 -> agendarCliente();
+                case 6 -> cadastrarServico(); // NOVA OPÇÃO
+                case 7 -> excluirAgendamento();
                 case 0 -> view.exibirMensagem("Saindo...");
                 default -> view.exibirMensagem("Opção inválida.");
             }
         } while (opcao != 0);
+    }
+
+    private void cadastrarServico() {
+        String nome = view.lerString("Nome do serviço: ");
+        int duracao = view.lerInt("Duração (em minutos): ");
+        double valor = Double.parseDouble(view.lerString("Valor (ex: 99.90): "));
+
+        Servico servico = new Servico(nome, duracao, valor);
+        servicos.add(servico);
+        view.exibirMensagem("Serviço cadastrado: " + servico);
     }
 
     private void cadastrarCliente() {
@@ -128,6 +164,28 @@ public class AplicativoAgendamento {
             view.exibirMensagem("Cliente não encontrado.");
         }
     }
+    private void excluirAgendamento() {
+        if (agendamentos.isEmpty()) {
+            view.exibirMensagem("Nenhum agendamento para excluir.");
+            return;
+        }
+
+        view.exibirMensagem("\n--- Agendamentos Atuais ---");
+        for (int i = 0; i < agendamentos.size(); i++) {
+            view.exibirMensagem((i + 1) + " - " + agendamentos.get(i));
+        }
+
+        int escolha = view.lerInt("Informe o número do agendamento que deseja excluir: ");
+
+        if (escolha < 1 || escolha > agendamentos.size()) {
+            view.exibirMensagem("Opção inválida.");
+            return;
+        }
+
+        Agendamento removido = agendamentos.remove(escolha - 1);
+        view.exibirMensagem("Agendamento removido com sucesso:\n" + removido);
+    }
+
 
     private Cliente consultarClientePorId(int id) {
         for (Cliente cliente : clientes) {
