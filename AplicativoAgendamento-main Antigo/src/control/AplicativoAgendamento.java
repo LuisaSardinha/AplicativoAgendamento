@@ -16,6 +16,9 @@ public class AplicativoAgendamento {
 
 
     private void agendarCliente() {
+        clientes.clear();
+        filaEspera.clear();
+        carregarClientesDoArquivo();
         int id = view.lerInt("Informe o ID do cliente para agendar: ");
         Cliente cliente = consultarClientePorId(id);
 
@@ -120,6 +123,7 @@ public class AplicativoAgendamento {
     }
 
     private void consultarCliente() {
+        carregarClientesDoArquivo();
         int id = view.lerInt("Informe o ID do cliente: ");
         Cliente cliente = consultarClientePorId(id);
         if (cliente != null) {
@@ -130,7 +134,8 @@ public class AplicativoAgendamento {
     }
 
     private Cliente consultarClientePorId(int id) {
-        for (Cliente cliente : clientes) {
+        carregarClientesDoArquivo();
+        for (Cliente cliente : this.clientes) {
             if (cliente.getId() == id) {
                 return cliente;
             }
@@ -139,6 +144,9 @@ public class AplicativoAgendamento {
     }
 
     private void listarClientes() {
+        clientes.clear();
+        filaEspera.clear();
+        carregarClientesDoArquivo();
         view.exibirMensagem(" --- Lista de Agendamentos ---");
         for (Agendamento agendamento : agendamentos) {
             view.exibirMensagem(agendamento.toString());
